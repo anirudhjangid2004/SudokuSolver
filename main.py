@@ -1,5 +1,6 @@
 from imageProcess import *
 from sudokuSolver import *
+import numpy as np
 
 
 pathImage = "Images/5.png"
@@ -36,7 +37,9 @@ if biggest.size != 0:
     ## SPLIT the sudoku for finding each digit available
     imgSolvedDigits = imgBlank.copy()
     boxes = splitBoxes(imgWarpColored)
-    print(boxes)
+    boxes = np.array(boxes)
+    # boxes = 255 - boxes
+    print(boxes[1])
 
     ## Taking prediction help from model
     numbers = getPrediction(boxes, model)
@@ -49,10 +52,13 @@ if biggest.size != 0:
 
     ## Find the solution of the board
     board = np.array_split(numbers, 9)
+    Print(board)
     try:
         solve(board)
     except:
         pass
+
+    Print(board)
 
     flatList = []
     for sublist in board:
@@ -75,6 +81,7 @@ if biggest.size != 0:
                 [imgDetectedDigits, imgSolvedDigits, imgInvWarpColored, inv_perspective])
     stackedImage = stackImages(imageArray, 1)
     cv.imshow('Progress: ', stackedImage)
+    cv.imwrite("Final_Image.png", stackedImage)
 
 else:
     print("No Sudoku Found")
